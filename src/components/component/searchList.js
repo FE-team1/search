@@ -2,11 +2,11 @@ const SearchList = ({ isSearch, value }) => {
   return (
     <div>
       {isSearch === "검색" ? (
-        <span>
+        <div>
           {value.map((item) => {
             return <div>{item}</div>;
           })}
-        </span>
+        </div>
       ) : (
         <div>{value}</div>
       )}

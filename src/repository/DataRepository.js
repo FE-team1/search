@@ -1,4 +1,4 @@
-const DATA_KEY = "data_history";
+const DATA_KEY = "search_history";
 
 // 관심사 분리
 // DataRepository 폴더를 만들어서 localStorage의 data를 관리(get, set ...)

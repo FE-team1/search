@@ -4,10 +4,15 @@ import getKeyword from "../apis/keyword.api";
 import SearchList from "../components/component/searchList";
 import DataRepository from "../repository/DataRepository";
 import RecentSearchList from "./component/recentSearchList";
+import styled from "styled-components";
 
 const SearchBox = () => {
   const [isSearch, setIsSearch] = useState("");
+
+  // 검색 데이터 & 에러 내용
   const [value, setValue] = useState([]);
+
+  // 최근 검색어 목록
   const [dataList, setDataList] = useState([]);
 
   const data = DataRepository.getData();
@@ -40,18 +45,23 @@ const SearchBox = () => {
   const onSubmitForm = (e) => {
     e.preventDefault();
 
-    // setData를 통해 localStorage에 data를 추가
     const storage_data = e.target.keyword.value;
-    DataRepository.setData(storage_data);
 
-    setDataList((prev) => [...prev, DataRepository.getData()]);
+    // input.value를 data list에 추가
+    setDataList((prev) => [...prev, storage_data]);
+    // 값이 추가될때마다 배열 형태로 localStorage에 저장
+
+    DataRepository.setData(dataList);
     return dataList;
   };
 
   return (
-    <form onSubmit={onSubmitForm}>
-      <input type="text" name="keyword" onChange={onSearchKeyword} />
-      <button>검색</button>
+    <S.SearchForm onSubmit={onSubmitForm}>
+      <div>
+        {" "}
+        <input type="text" name="keyword" onChange={onSearchKeyword} />
+        <button>검색</button>
+      </div>
       <SearchList isSearch={isSearch} value={value} />
       {/* 최근 검색어 불러오기*/}
       <div style={{ fontWeight: "bold", marginTop: 15 }}>최근 검색어 목록</div>
@@ -59,8 +69,19 @@ const SearchBox = () => {
 
       {/* localStorage에 마지막 데이터만 추가되는중 */}
       <div style={{ color: "red", marginTop: 15 }}>localStorage에 마지막으로 저장된 값은? {data}</div>
-    </form>
+    </S.SearchForm>
   );
 };
 
 export default SearchBox;
+
+const SearchForm = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const S = {
+  SearchForm,
+};

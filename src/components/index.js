@@ -4,6 +4,7 @@ import SearchList from '../components/component/searchList';
 import DataRepository from '../repository/DataRepository';
 import RecentSearchList from './component/recentSearchList';
 import styled from 'styled-components';
+import { GrSearch} from 'react-icons/gr';
 
 const SearchBox = () => {
     // isArray로 처리
@@ -34,11 +35,9 @@ const SearchBox = () => {
             const res = await axios.get(`http://localhost:3000/search?key=${item}`);
             setIsSearch('검색');
             setValue(res.data);
-            return value;
         } catch (err) {
             setIsSearch('에러');
             setValue(err.response.data);
-            return value;
         }
     };
 
@@ -57,10 +56,10 @@ const SearchBox = () => {
 
     return (
         <S.SearchForm onSubmit={onSubmitForm}>
-            <div>
-                <input type="text" name="keyword" onChange={onSearchKeyword} />
-                <button>검색</button>
-            </div>
+            <S.InputBox>
+                <S.Input type="text" name="keyword" onChange={onSearchKeyword} />
+                <GrSearch size='1.5em'/>
+            </S.InputBox>
             <SearchList isSearch={isSearch} value={value} />
             {/* 최근 검색어 불러오기*/}
             <div style={{ fontWeight: 'bold', marginTop: 15 }}>최근 검색어 목록</div>
@@ -75,12 +74,39 @@ const SearchBox = () => {
 export default SearchBox;
 
 const SearchForm = styled.form`
+    position: relative;
+    margin-top: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 `;
+const InputBox = styled.div`
+    border: 2px solid #d9d9d9;
+    border-radius: 10px;
+    display: flex;
+    padding: 3px;
+`;
+
+
+const Input = styled.input`
+    font-size: 15px;
+    color: #222222;
+    width: 300px;
+    border: none;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    position: relative;
+    background: none;
+    z-index: 5;
+    padding: 5px;
+    &::placeholder { color: #aaaaaa; }
+    &:focus { outline: none; }
+`;
+
 
 const S = {
     SearchForm,
+    InputBox,
+    Input,
 };

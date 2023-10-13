@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import getKeyword from "../apis/keyword.api";
 import SearchList from "../components/component/searchList";
 import DataRepository from "../repository/DataRepository";
 import RecentSearchList from "./component/recentSearchList";
 import styled from "styled-components";
 
 const SearchBox = () => {
+  // isArray로 처리
   const [isSearch, setIsSearch] = useState("");
 
   // 검색 데이터 & 에러 내용
@@ -22,8 +22,8 @@ const SearchBox = () => {
   if (dataList.length > 5) dataList.shift();
 
   useEffect(() => {
-    getKeyword();
-  }, []);
+    DataRepository.setData(dataList);
+  }, [dataList]);
 
   const onSearchKeyword = async (e) => {
     let item = e.target.value;
@@ -49,8 +49,8 @@ const SearchBox = () => {
 
     // input.value를 data list에 추가
     setDataList((prev) => [...prev, storage_data]);
-    // 값이 추가될때마다 배열 형태로 localStorage에 저장
 
+    // 값이 추가될때마다 배열 형태로 localStorage에 저장
     DataRepository.setData(dataList);
     return dataList;
   };
@@ -58,7 +58,6 @@ const SearchBox = () => {
   return (
     <S.SearchForm onSubmit={onSubmitForm}>
       <div>
-        {" "}
         <input type="text" name="keyword" onChange={onSearchKeyword} />
         <button>검색</button>
       </div>
@@ -68,7 +67,7 @@ const SearchBox = () => {
       <RecentSearchList value={value} dataList={dataList} />
 
       {/* localStorage에 마지막 데이터만 추가되는중 */}
-      <div style={{ color: "red", marginTop: 15 }}>localStorage에 마지막으로 저장된 값은? {data}</div>
+      <div style={{ color: "red", marginTop: 15 }}>localStorage에 저장된 값은? {data}</div>
     </S.SearchForm>
   );
 };

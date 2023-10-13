@@ -1,14 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import getKeyword from "../apis/keyword.api";
-import SearchList from "./searchList";
+import SearchList from "../components/component/searchList";
 import DataRepository from "../repository/DataRepository";
-import { useData } from "../provider/searchProvider";
+import RecentSearchList from "./component/recentSearchList";
 
 const SearchBox = () => {
   const [isSearch, setIsSearch] = useState("");
   const [value, setValue] = useState([]);
-  // const [searchData, setSearchData] = useData([]);
+  const [dataList, setDataList] = useState([]);
+
+  const data = DataRepository.getData();
+
+  // 예외처리
+  // 최근 검색어의 갯수가 5개가 넘어가면 첫번째 요소를 삭제
+  if (dataList.length > 5) dataList.shift();
 
   useEffect(() => {
     getKeyword();
@@ -31,13 +37,15 @@ const SearchBox = () => {
     }
   };
 
-  // 폼이 제출되면
-  // localStorage에 검색 데이터를 저장
-  // setData를 통해 localStorage에 data를 변경
   const onSubmitForm = (e) => {
     e.preventDefault();
+
+    // setData를 통해 localStorage에 data를 추가
     const storage_data = e.target.keyword.value;
     DataRepository.setData(storage_data);
+
+    setDataList((prev) => [...prev, DataRepository.getData()]);
+    return dataList;
   };
 
   return (
@@ -46,7 +54,11 @@ const SearchBox = () => {
       <button>검색</button>
       <SearchList isSearch={isSearch} value={value} />
       {/* 최근 검색어 불러오기*/}
-      <div>{DataRepository.getData()}</div>
+      <div style={{ fontWeight: "bold", marginTop: 15 }}>최근 검색어 목록</div>
+      <RecentSearchList value={value} dataList={dataList} />
+
+      {/* localStorage에 마지막 데이터만 추가되는중 */}
+      <div style={{ color: "red", marginTop: 15 }}>localStorage에 마지막으로 저장된 값은? {data}</div>
     </form>
   );
 };

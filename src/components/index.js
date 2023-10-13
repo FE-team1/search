@@ -4,11 +4,11 @@ import SearchList from '../components/component/searchList';
 import DataRepository from '../repository/DataRepository';
 import RecentSearchList from './component/recentSearchList';
 import styled from 'styled-components';
-import { GrSearch} from 'react-icons/gr';
+import { GrSearch } from 'react-icons/gr';
 
 const SearchBox = () => {
     // isArray로 처리
-    const [isSearch, setIsSearch] = useState('');
+    // const [isSearch, setIsSearch] = useState('');
 
     // 검색 데이터 & 에러 내용
     const [value, setValue] = useState([]);
@@ -33,10 +33,8 @@ const SearchBox = () => {
 
         try {
             const res = await axios.get(`http://localhost:3000/search?key=${item}`);
-            setIsSearch('검색');
             setValue(res.data);
         } catch (err) {
-            setIsSearch('에러');
             setValue(err.response.data);
         }
     };
@@ -55,31 +53,52 @@ const SearchBox = () => {
     };
 
     return (
-        <S.SearchForm onSubmit={onSubmitForm}>
-            <S.InputBox>
-                <S.Input type="text" name="keyword" onChange={onSearchKeyword} />
-                <GrSearch size='1.5em'/>
-            </S.InputBox>
-            <SearchList isSearch={isSearch} value={value} />
+        <S.Wrapper>
+            <S.SearchForm onSubmit={onSubmitForm}>
+                <S.InputBox>
+                    <S.Input
+                        type="text"
+                        name="keyword"
+                        onChange={onSearchKeyword}
+                        placeholder="검색어를 입력해주세요."
+                    />
+                    <GrSearch size="1.5em" />
+                </S.InputBox>
+            </S.SearchForm>
+            {/* {length === 0 ? '' : <SearchList isSearch={isSearch} value={value} />} */}
             {/* 최근 검색어 불러오기*/}
-            <div style={{ fontWeight: 'bold', marginTop: 15 }}>최근 검색어 목록</div>
-            <RecentSearchList value={value} dataList={dataList} />
+            {value.length === 0 ? (
+                <HistoryContainer>
+                    <p style={{ color: '#aaaaaa' }}>최근 검색된 기록이 없습니다.</p>
+                </HistoryContainer>
+            ) : (
+                <>
+                <SearchList value={value} />
+                <S.HistoryContainer>
+                    <S.Title>최근 검색어</S.Title>
+                    <RecentSearchList value={value} dataList={dataList} />
+                </S.HistoryContainer>
+                </>
+            )}
 
             {/* localStorage에 마지막 데이터만 추가되는중 */}
             <div style={{ color: 'red', marginTop: 15 }}>localStorage에 저장된 값은? {data}</div>
-        </S.SearchForm>
+        </S.Wrapper>
     );
 };
 
 export default SearchBox;
 
-const SearchForm = styled.form`
+const Wrapper = styled.div`
     position: relative;
     margin-top: 400px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    margin: 400px 700px;
+`;
+
+const SearchForm = styled.form`
+    display: flex;
 `;
 const InputBox = styled.div`
     border: 2px solid #d9d9d9;
@@ -87,7 +106,6 @@ const InputBox = styled.div`
     display: flex;
     padding: 3px;
 `;
-
 
 const Input = styled.input`
     font-size: 15px;
@@ -97,16 +115,32 @@ const Input = styled.input`
     padding-bottom: 10px;
     padding-left: 10px;
     position: relative;
-    background: none;
-    z-index: 5;
     padding: 5px;
-    &::placeholder { color: #aaaaaa; }
-    &:focus { outline: none; }
+    &::placeholder {
+        color: #aaaaaa;
+    }
+    &:focus {
+        outline: none;
+    }
 `;
 
+const HistoryContainer = styled.div`
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Title = styled.div`
+    float: left;
+    font-weight: 400;
+    color: #666;
+`;
 
 const S = {
+    Wrapper,
     SearchForm,
     InputBox,
     Input,
+    HistoryContainer,
+    Title,
 };

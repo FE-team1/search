@@ -1,11 +1,11 @@
 const SearchList = ({ value }) => {
-    return (
-        <>
-            {value.map((item) => {
-                return <div>{item}</div>;
-            })}
-        </>
-    );
+  return (
+        <div>
+          {value.map((item) => {
+            return <div style={{color:'#0C090A', paddingTop: '7px'}}>{item}</div>;
+          })}
+        </div>
+  );
 };
 
 export default SearchList;

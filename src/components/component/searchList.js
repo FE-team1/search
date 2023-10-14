@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 
 const SearchList = ({ value }) => {
-    return (
-        <>
-            {Array.isArray({ value }) ? (
-                value.map((item) => {
-                    return <SearchListContainer>{item}</SearchListContainer>;
-                })
-            ) : (
-                <SearchListContainer>{value}</SearchListContainer>
-            )}
-        </>
-    );
+  return (
+    <div>
+      {Array.isArray(value) ? (
+        <div>
+          {value.map((item) => {
+            return <SearchListContainer>{item}</SearchListContainer>;
+          })}
+        </div>
+      ) : (
+        <SearchListContainer>{value}</SearchListContainer>
+      )}
+    </div>
+  );
 };
 
 export default SearchList;

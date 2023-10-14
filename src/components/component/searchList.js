@@ -1,7 +1,7 @@
-const SearchList = ({ isSearch, value }) => {
+const SearchList = ({ value }) => {
   return (
     <div>
-      {isSearch === "검색" ? (
+      {Array.isArray(value) ? (
         <div>
           {value.map((item) => {
             return <div>{item}</div>;

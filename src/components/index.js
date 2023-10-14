@@ -15,19 +15,20 @@ const SearchBox = () => {
   // 최근 검색어 목록
   const [dataList, setDataList] = useState([]);
 
-  const data = DataRepository.getData();
+  const data = JSON.parse(DataRepository.getData());
 
   // 예외처리
   // 최근 검색어의 갯수가 5개가 넘어가면 첫번째 요소를 삭제
   if (dataList.length > 5) dataList.shift();
 
-  useEffect(() => {
-    DataRepository.setData(dataList);
-  }, [dataList]);
+  // useEffect(() => {
+  //   DataRepository.setData(dataList);
+  // }, [dataList]);
 
   const onSearchKeyword = async (e) => {
     let item = e.target.value;
 
+    DataRepository.setData(dataList);
     e.preventDefault();
 
     try {
@@ -54,6 +55,7 @@ const SearchBox = () => {
     DataRepository.setData(dataList);
     return dataList;
   };
+  console.log(data);
 
   return (
     <S.SearchForm onSubmit={onSubmitForm}>
@@ -64,10 +66,10 @@ const SearchBox = () => {
       <SearchList isSearch={isSearch} value={value} />
       {/* 최근 검색어 불러오기*/}
       <div style={{ fontWeight: "bold", marginTop: 15 }}>최근 검색어 목록</div>
-      <RecentSearchList value={value} dataList={dataList} />
-
-      {/* localStorage에 마지막 데이터만 추가되는중 */}
-      <div style={{ color: "red", marginTop: 15 }}>localStorage에 저장된 값은? {data}</div>
+      {/* <RecentSearchList value={value} data={data} /> */}
+      {data.map((item) => (
+        <div>{item}</div>
+      ))}
     </S.SearchForm>
   );
 };

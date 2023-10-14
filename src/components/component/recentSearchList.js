@@ -1,13 +1,11 @@
 import DataRepository from "../../repository/DataRepository";
 
-const RecentSearchList = ({ value }) => {
-  const localStorageDataList = JSON.parse(DataRepository.getData());
-  console.log(localStorageDataList);
+const RecentSearchList = ({ value, data }) => {
   return (
     value === "검색어를 입력해주세요." &&
-    localStorageDataList &&
-    localStorageDataList.map((data) => {
-      return <div>{data}</div>;
+    data &&
+    data.map((item) => {
+      return <div>{item}</div>;
     })
   );
 };

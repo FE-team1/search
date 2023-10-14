@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import SearchList from '../components/component/searchList';
 import DataRepository from '../repository/DataRepository';
-import RecentSearchList from './component/recentSearchList';
 import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
 
@@ -16,7 +15,7 @@ const SearchBox = () => {
     // 최근 검색어 목록
     const [dataList, setDataList] = useState([]);
 
-    const data = DataRepository.getData();
+    const data = JSON.parse(DataRepository.getData());
 
     // 예외처리
     // 최근 검색어의 갯수가 5개가 넘어가면 첫번째 요소를 삭제
@@ -32,6 +31,8 @@ const SearchBox = () => {
         try {
             const res = await axios.get(`http://localhost:3000/search?key=${item}`);
             setValue(res.data);
+            console.log(item);
+            console.log(res.data);
         } catch (err) {
             setValue(err.response.data);
         }
@@ -39,6 +40,7 @@ const SearchBox = () => {
 
     const onSubmitForm = (e) => {
         e.preventDefault();
+        // 왜 여긴 keyword인지?
         const storage_data = e.target.keyword.value;
         // input.value를 data list에 추가
         setDataList((prev) => [...prev, storage_data]);
@@ -70,7 +72,11 @@ const SearchBox = () => {
                     <SearchList value={value} />
                     <S.HistoryContainer>
                         <S.Title>최근 검색어</S.Title>
-                        <RecentSearchList value={value} dataList={dataList} />
+                        {/* 컴포넌트 분리해서 맵돌리시 데이터 증발문제! */}
+                        {/* <RecentSearchList value={value} dataList={dataList} /> */}
+                        {data.map((item) => (
+                            <div>{item}</div>
+                        ))}
                     </S.HistoryContainer>
                 </S.ListContainer>
             )}
@@ -93,19 +99,17 @@ const SearchForm = styled.form`
     display: flex;
 `;
 const InputBox = styled.div`
-    box-shadow : 0 2px 6px rgb(0 0 0 / 30%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;
     display: flex;
-    padding: 3px;
+    padding: 3px 15px;
 `;
 
 const Input = styled.input`
     font-size: 15px;
     color: #222222;
-    width: 300px;
+    width: 278px;
     border: none;
-    padding-bottom: 10px;
-    padding-left: 10px;
     position: relative;
     padding: 5px;
     &::placeholder {
@@ -117,7 +121,7 @@ const Input = styled.input`
 `;
 
 const HistoryContainer = styled.div`
-    padding: 18px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
 `;
@@ -129,7 +133,7 @@ const Title = styled.div`
 `;
 
 const ListContainer = styled.div`
-    box-shadow : 0 2px 6px rgb(0 0 0 / 30%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;
     width: 320px;
     padding: 10px;

@@ -53,7 +53,11 @@ const SearchBox = () => {
                     <SearchList value={value} />
                     <S.HistoryContainer>
                         <S.Title>최근 검색어</S.Title>
-                        <RecentSearchList value={value} dataList={dataList} />
+                        {/* 컴포넌트 분리해서 맵돌리시 데이터 증발문제! */}
+                        {/* <RecentSearchList value={value} dataList={dataList} /> */}
+                        {data.map((item) => (
+                            <div>{item}</div>
+                        ))}
                     </S.HistoryContainer>
                 </S.ListContainer>
             )}
@@ -77,19 +81,17 @@ const SearchForm = styled.form`
     display: flex;
 `;
 const InputBox = styled.div`
-    box-shadow : 0 2px 6px rgb(0 0 0 / 30%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;
     display: flex;
-    padding: 3px;
+    padding: 3px 15px;
 `;
 
 const Input = styled.input`
     font-size: 15px;
     color: #222222;
-    width: 300px;
+    width: 278px;
     border: none;
-    padding-bottom: 10px;
-    padding-left: 10px;
     position: relative;
     padding: 5px;
     &::placeholder {
@@ -101,7 +103,7 @@ const Input = styled.input`
 `;
 
 const HistoryContainer = styled.div`
-    padding: 18px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
 `;
@@ -113,7 +115,7 @@ const Title = styled.div`
 `;
 
 const ListContainer = styled.div`
-    box-shadow : 0 2px 6px rgb(0 0 0 / 30%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;
     width: 320px;
     padding: 10px;

@@ -2,53 +2,36 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import SearchList from '../components/component/searchList';
 import DataRepository from '../repository/DataRepository';
-import RecentSearchList from './component/recentSearchList';
 import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
 
 const SearchBox = () => {
-    // isArray로 처리
-    // const [isSearch, setIsSearch] = useState('');
+  const [value, setValue] = useState([]);
 
-    // 검색 데이터 & 에러 내용
-    const [value, setValue] = useState([]);
+  // 최근 검색어 목록
+  const [dataList, setDataList] = useState([]);
 
-    // 최근 검색어 목록
-    const [dataList, setDataList] = useState([]);
+  const data = JSON.parse(DataRepository.getData());
 
-    const data = DataRepository.getData();
+  if (dataList.length > 5) dataList.shift();
 
-    // 예외처리
-    // 최근 검색어의 갯수가 5개가 넘어가면 첫번째 요소를 삭제
-    if (dataList.length > 5) dataList.shift();
+  const onSearchKeyword = async (e) => {
+    e.preventDefault();
+    let item = e.target.value;
+    DataRepository.setData(dataList);
+    getRecentKeyword(item, value, setValue);
+  };
 
-    useEffect(() => {
-        DataRepository.setData(dataList);
-    }, [dataList]);
+  const onSubmitForm = (e) => {
+    e.preventDefault();
+    const storage_data = e.target.keyword.value;
+    setDataList((prev) => [...prev, storage_data]);
+    DataRepository.setData(dataList);
+  };
+  console.log(value);
 
-    const onSearchKeyword = async (e) => {
-        let item = e.target.value;
-        e.preventDefault();
-        try {
-            const res = await axios.get(`http://localhost:3000/search?key=${item}`);
-            setValue(res.data);
-        } catch (err) {
-            setValue(err.response.data);
-        }
-    };
-
-    const onSubmitForm = (e) => {
-        e.preventDefault();
-        const storage_data = e.target.keyword.value;
-        // input.value를 data list에 추가
-        setDataList((prev) => [...prev, storage_data]);
-        // 값이 추가될때마다 배열 형태로 localStorage에 저장
-        DataRepository.setData(dataList);
-        return dataList;
-    };
-
-    return (
-        <S.Wrapper>
+  return (
+          <S.Wrapper>
             <S.SearchForm onSubmit={onSubmitForm}>
                 <S.InputBox>
                     <S.Input
@@ -76,10 +59,11 @@ const SearchBox = () => {
             )}
             <div style={{ color: 'red', marginTop: 15 }}>localStorage에 저장된 값은? {data}</div>
         </S.Wrapper>
-    );
+  );
 };
 
 export default SearchBox;
+
 
 const Wrapper = styled.div`
     position: relative;
@@ -144,3 +128,7 @@ const S = {
     Title,
     ListContainer,
 };
+
+
+
+

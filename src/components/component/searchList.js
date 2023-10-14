@@ -4,7 +4,7 @@ const SearchList = ({ value }) => {
       {Array.isArray(value) ? (
         <div>
           {value.map((item) => {
-            return <div>{item}</div>;
+            return <div style={{color:'#0C090A', paddingTop: '7px'}}>{item}</div>;
           })}
         </div>
       ) : (

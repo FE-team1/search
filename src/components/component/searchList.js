@@ -1,16 +1,10 @@
-const SearchList = ({ isSearch, value }) => {
+const SearchList = ({ value }) => {
   return (
-    <div>
-      {isSearch === "검색" ? (
         <div>
           {value.map((item) => {
-            return <div>{item}</div>;
+            return <div style={{color:'#0C090A', paddingTop: '7px'}}>{item}</div>;
           })}
         </div>
-      ) : (
-        <div>{value}</div>
-      )}
-    </div>
   );
 };
 

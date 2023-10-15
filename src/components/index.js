@@ -22,7 +22,6 @@ const SearchBox = () => {
         DataRepository.setData(dataList);
         getRecentKeyword(item, value, setValue);
         setSearchResult(item);
-        console.log(`result:`, searchResult)
     };
 
     const onSubmitForm = (e) => {

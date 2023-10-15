@@ -89,14 +89,8 @@ export default SearchBox;
 const Wrapper = styled.div`
     position: relative;
     margin-top: 400px;
-    margin: 400px 700px;
-
-    flex-wrap: wrap;
 `;
 
-const SearchForm = styled.form`
-    display: flex;
-`;
 const InputBox = styled.div`
     box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;
@@ -147,3 +141,7 @@ const S = {
     Title,
     ListContainer,
 };
+
+
+
+

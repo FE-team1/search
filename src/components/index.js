@@ -1,37 +1,52 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SearchList from '../components/component/searchList';
 import DataRepository from '../repository/DataRepository';
 import styled from 'styled-components';
 import { GrSearch } from 'react-icons/gr';
+import getRecentKeyword from '../apis/keyword.api';
 
 const SearchBox = () => {
-  const [value, setValue] = useState([]);
+    const [value, setValue] = useState([]);
+    const [searchResult, setSearchResult] = useState('');
+    const [cursorIndex, setCursorIndex] = useState(0); //키보드방향으로 드롭다운 선택을 위한 상태
 
-  // 최근 검색어 목록
-  const [dataList, setDataList] = useState([]);
+    // 최근 검색어 목록
+    const [dataList, setDataList] = useState([]);
 
-  const data = JSON.parse(DataRepository.getData());
+    const data = JSON.parse(DataRepository.getData());
 
-  if (dataList.length > 5) dataList.shift();
+    if (dataList.length > 5) dataList.shift();
 
-  const onSearchKeyword = async (e) => {
-    e.preventDefault();
-    let item = e.target.value;
-    DataRepository.setData(dataList);
-    getRecentKeyword(item, value, setValue);
-  };
+    const onSearchKeyword = async (e) => {
+        e.preventDefault();
+        let item = e.target.value;
+        DataRepository.setData(dataList);
+        getRecentKeyword(item, value, setValue);
+        setSearchResult(item);
+    };
 
-  const onSubmitForm = (e) => {
-    e.preventDefault();
-    const storage_data = e.target.keyword.value;
-    setDataList((prev) => [...prev, storage_data]);
-    DataRepository.setData(dataList);
-  };
-  console.log(value);
+    const onSubmitForm = (e) => {
+        e.preventDefault();
+        const storage_data = e.target.keyword.value;
+        setDataList((prev) => [...prev, storage_data]);
+        DataRepository.setData(dataList);
+    };
 
-  return (
-          <S.Wrapper>
+    const keyDownHandler = (e) => {
+        if (e.key === "ArrowDown") {
+            //커서 움직이는 걸 방지하는 용도
+            e.preventDefault();
+            //아래쪽 방향 키보드를 누르면 index를 +1 해줍니다.
+            setCursorIndex((prev) => prev + 1);
+    } else if (e.key === "ArrowUp") {
+        //커서 움직이는 걸 방지하는 용도
+        e.preventDefault();
+       //위쪽 방향 키보드를 누르면 index를 -1 해줍니다.
+        setCursorIndex((prev) => Math.abs(prev - 1));}
+    }
+    // value = 연관검색어, data = 검색어
+    return (
+        <S.Wrapper>
             <S.SearchForm onSubmit={onSubmitForm}>
                 <S.InputBox>
                     <S.Input
@@ -39,6 +54,9 @@ const SearchBox = () => {
                         name="keyword"
                         onChange={onSearchKeyword}
                         placeholder="검색어를 입력해주세요."
+                        onKeyDown={(e) => {
+                            keyDownHandler(e);
+                        }}
                     />
                     <GrSearch size="1.5em" />
                 </S.InputBox>
@@ -50,7 +68,7 @@ const SearchBox = () => {
                 </HistoryContainer>
             ) : (
                 <S.ListContainer>
-                    <SearchList value={value} />
+                    <SearchList value={value} searchResult={searchResult} />
                     <S.HistoryContainer>
                         <S.Title>최근 검색어</S.Title>
                         {/* 컴포넌트 분리해서 맵돌리시 데이터 증발문제! */}
@@ -63,17 +81,14 @@ const SearchBox = () => {
             )}
             <div style={{ color: 'red', marginTop: 15 }}>localStorage에 저장된 값은? {data}</div>
         </S.Wrapper>
-  );
+    );
 };
 
 export default SearchBox;
 
-
 const Wrapper = styled.div`
     position: relative;
     margin-top: 400px;
-    display: flex;
-    flex-direction: column;
     margin: 400px 700px;
 `;
 

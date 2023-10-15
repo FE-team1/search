@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getRecentKeyword = async (item, value, setValue) => {
+const getRecentKeyword = async (item, value, setValue) => {
   try {
     const res = await axios.get(`http://localhost:3000/search?key=${item}`);
     setValue(res.data);
@@ -10,3 +10,5 @@ export const getRecentKeyword = async (item, value, setValue) => {
     return value;
   }
 };
+
+export default getRecentKeyword;

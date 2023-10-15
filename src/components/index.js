@@ -75,6 +75,8 @@ const Wrapper = styled.div`
     position: relative;
     margin-top: 400px;
     margin: 400px 700px;
+
+    flex-wrap: wrap;
 `;
 
 const SearchForm = styled.form`

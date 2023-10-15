@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 
-const SearchList = ({ value: keyword, searchResult }) => {
+const SearchList = ({ value, searchResult }) => {
     // value = 연관검색어, data =
-    console.log(`value:`, keyword);
+    let keyword = value.join("")
+    console.log(`value:`, typeof(keyword));
+    console.log(`keyword:`, keyword)
     console.log(`searchResult:`, searchResult);
-    if (Array.isArray(keyword) !== '' && searchResult.includes(keyword)) {
-        const parts = searchResult.split(new RegExp(`(${keyword})`, 'gi'));
+    if (searchResult !== '' && keyword.includes(searchResult)) {
+        const matchParts = keyword.split(new RegExp(`(${searchResult})`, 'gi'));
+        console.log('True')
         return (
             <>
-                {parts.map((part, index) =>
-                    //소문자로 변환 후 비교하여 일치
-                    part.toLowerCase() === keyword.toLowerCase() ? (
-                        <SearchListContainer key={index}>{part}</SearchListContainer>
+                {matchParts.map((part, idx) =>
+                    part.toLowerCase() === searchResult.toLowerCase() ? (
+                        <SearchListContainer key={idx}>{part}</SearchListContainer>
                     ) : (
                         //일치하지않으면 그대로 출력
                         part
@@ -30,5 +32,6 @@ const SearchListContainer = styled.div`
     display: flex;
     flex-direction: column;
     color: #0c090a;
-    padding: 7px 10px;
+    font-weight: bold;
+    padding-left: 7px;
 `;

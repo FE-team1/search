@@ -92,9 +92,6 @@ const Wrapper = styled.div`
     margin: 400px 700px;
 `;
 
-const SearchForm = styled.form`
-    display: flex;
-`;
 const InputBox = styled.div`
     box-shadow: 0 2px 6px rgb(0 0 0 / 30%);
     border-radius: 10px;

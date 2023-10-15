@@ -2,15 +2,16 @@ import styled from 'styled-components';
 
 const SearchList = ({ value, searchResult }) => {
     // value = 연관검색어, data =
-    let keyword = value.join("")
-    console.log(`value:`, typeof(keyword));
-    console.log(`keyword:`, keyword)
+    let keyword = Array.isArray(value) ? value.join('') : '';
+    console.log(`value:`, typeof keyword);
+    console.log(`keyword:`, keyword);
     console.log(`searchResult:`, searchResult);
     if (searchResult !== '' && keyword.includes(searchResult)) {
         const matchParts = keyword.split(new RegExp(`(${searchResult})`, 'gi'));
-        console.log('True')
+        console.log('True');
         return (
-            <>
+            // 이상하게 출력된다.. css문제..?
+            <KeywordContainer>
                 {matchParts.map((part, idx) =>
                     part.toLowerCase() === searchResult.toLowerCase() ? (
                         <SearchListContainer key={idx}>{part}</SearchListContainer>
@@ -19,7 +20,7 @@ const SearchList = ({ value, searchResult }) => {
                         part
                     )
                 )}
-            </>
+            </KeywordContainer>
         );
     }
 
@@ -28,10 +29,13 @@ const SearchList = ({ value, searchResult }) => {
 
 export default SearchList;
 
-const SearchListContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+const SearchListContainer = styled.span`
     color: #0c090a;
     font-weight: bold;
     padding-left: 7px;
 `;
+
+const KeywordContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`

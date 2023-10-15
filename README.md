@@ -20,7 +20,7 @@ CORS는 최신 브라우저에서 구현된 동일 출처 정책(same-origin pol
         >  자바스크립트 파일이나 css 파일은 동일 출처 정책에 영향을 받지 않고 가져올 수 있다.
         >  이를 이용해서 자바스크립트 파일을 가져와서 이를 json 형식으로 파싱해서 데이터를 사용할 수 있다.
 
- ```
+
 @CrossOrigin(origin="*", allowedHeaders = "*")
 @Controller
 public class MainController {
@@ -50,7 +50,7 @@ public class MainController {
           5) Access-Control-Allow-Methods - 리소스에 접근할 때 메소드가 허용되는지
           6) Access-Control-Allow-Headers - 어떤 헤더 필드 네임이 실제 요청에서 사용할 수 있는지 가리킨다.
 
-```
+
 @Component
 public class SimpleCorsFilter implements Filter {
 
